@@ -1,0 +1,441 @@
+chn22mc029@ccn-39-Vostro-3470:~$ mysql -u mca2229 -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 12
+Server version: 5.7.33-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| bank               |
+| job                |
+| mysql              |
+| orga               |
+| performance_schema |
+| student            |
+| sys                |
++--------------------+
+8 rows in set (0.04 sec)
+
+mysql> use job;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++---------------+
+| Tables_in_job |
++---------------+
+| countries     |
+| departments   |
+| dependents    |
+| dependentss   |
+| employees     |
+| jobs          |
+| locations     |
+| managers      |
+| regions       |
++---------------+
+9 rows in set (0.00 sec)
+
+mysql> drop dependentss
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'dependentss' at line 1
+mysql> drop table  dependentss
+    -> ;
+Query OK, 0 rows affected (0.21 sec)
+
+mysql> show tables;
++---------------+
+| Tables_in_job |
++---------------+
+| countries     |
+| departments   |
+| dependents    |
+| employees     |
+| jobs          |
+| locations     |
+| managers      |
+| regions       |
++---------------+
+8 rows in set (0.01 sec)
+
+mysql> select *from regions;
++-----------+---------------+
+| region_id | region_name   |
++-----------+---------------+
+|         1 | North America |
+|         2 | Africa        |
+|         3 | Asia          |
+|         4 | south America |
+|         5 | Europe        |
++-----------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> select *from countries;
++------------+--------------+-----------+
+| country_id | country_name | region_id |
++------------+--------------+-----------+
+|       1001 | India        |         1 |
+|       1002 | China        |         2 |
+|       1003 | Brazil       |         3 |
+|       1004 | canada       |         4 |
+|       1005 | France       |         5 |
++------------+--------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> show table from locations;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from locations' at line 1
+mysql> desc locations;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| location_id    | int(11)      | NO   | PRI | NULL    |       |
+| street_address | varchar(200) | YES  |     | NULL    |       |
+| postal_code    | varchar(20)  | YES  |     | NULL    |       |
+| city           | varchar(100) | YES  |     | NULL    |       |
+| state_province | varchar(100) | YES  |     | NULL    |       |
+| country_id     | int(11)      | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+6 rows in set (0.01 sec)
+
+mysql> insert into locations(location_id,street_address,postal_code,city,state_province,country_id)values(2001,'sagar street',699991,tvm,tvm,1001),(2002,'huwan street',699992,china,china,1002),(2003,'mexico street',699993,Brazil,Brazil,1003),(2004,'toronto street',699994,canada,canada,1004),(2005,'paris  street',699995,France,France,1005);
+ERROR 1054 (42S22): Unknown column 'tvm' in 'field list'
+mysql> insert into locations(location_id,street_address,postal_code,city,state_province,country_id)values(2001,'sagar street',699991,India,India,1001),(2002,'huwan street',699992,china,china,1002),(2003,'mexico street',699993,Brazil,Brazil,1003),(2004,'toronto street',699994,canada,canada,1004),(2005,'paris  street',699995,France,France,1005);
+ERROR 1054 (42S22): Unknown column 'India' in 'field list'
+mysql> insert into locations(location_id,street_address,postal_code,city,state_province,country_id)values(2001,'sagar street',699991,India,sagar,1001),(2002,'huwan street',699992,china,huwan,1002),(2003,'mexico street',699993,Brazil,mexico,1003),(2004,'toronto street',699994,canada,tornoto,1004),(2005,'paris street',699995,France,paris,1005);
+ERROR 1054 (42S22): Unknown column 'India' in 'field list'
+mysql> insert into locations(location_id,street_address,postal_code,city,state_province,country_id)values(2001,'sagar street',699991,Kerela,sagar,1001),(2002,'huwan street',699992,china,huwan,1002),(2003,'mexico street',699993,Brazil,mexico,1003),(2004,'toronto street',699994,canada,tornoto,1004),(2005,'paris street',699995,France,paris,1005);
+ERROR 1054 (42S22): Unknown column 'Kerela' in 'field list'
+mysql> insert into locations(location_id,street_address,postal_code,city,state_province,country_id)values(2001,'sagar street',699991,'India','sagar',1001),(2002,'huwan street',699992,'china','huwan',1002),(2003,'mexico street',699993,'Brazil','mexico',1003),(2004,'toronto street',699994,'canada','tornoto',1004),(2005,'paris street',699995,'France','paris',1005);
+Query OK, 5 rows affected (0.04 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select *from locations;
++-------------+----------------+-------------+--------+----------------+------------+
+| location_id | street_address | postal_code | city   | state_province | country_id |
++-------------+----------------+-------------+--------+----------------+------------+
+|        2001 | sagar street   | 699991      | India  | sagar          |       1001 |
+|        2002 | huwan street   | 699992      | china  | huwan          |       1002 |
+|        2003 | mexico street  | 699993      | Brazil | mexico         |       1003 |
+|        2004 | toronto street | 699994      | canada | tornoto        |       1004 |
+|        2005 | paris street   | 699995      | France | paris          |       1005 |
++-------------+----------------+-------------+--------+----------------+------------+
+5 rows in set (0.00 sec)
+
+mysql> desc departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| department_id   | int(11)      | NO   | PRI | NULL    |       |
+| department_name | varchar(200) | YES  |     | NULL    |       |
+| location_id     | int(11)      | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into departmentss(department_id,department_name,location_id)values(1011,'hr',2001),(1012,'marketer',2002),(1013,'sales',2003),(1014,'development',2004),(1015,'tesing',2005);
+ERROR 1146 (42S02): Table 'job.departmentss' doesn't exist
+mysql> insert into departments(department_id,department_name,location_id)values(1011,'hr',2001),(1012,'marketer',2002),(1013,'sales',2003),(1014,'development',2004),(1015,'tesing',2005);
+Query OK, 5 rows affected (0.04 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select *from departmentss;
+ERROR 1146 (42S02): Table 'job.departmentss' doesn't exist
+mysql> select *from departments;
++---------------+-----------------+-------------+
+| department_id | department_name | location_id |
++---------------+-----------------+-------------+
+|          1011 | hr              |        2001 |
+|          1012 | marketer        |        2002 |
+|          1013 | sales           |        2003 |
+|          1014 | development     |        2004 |
+|          1015 | tesing          |        2005 |
++---------------+-----------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> desc employees;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| employee_id   | int(11)      | NO   | PRI | NULL    |       |
+| first_name    | varchar(200) | YES  |     | NULL    |       |
+| last_name     | varchar(200) | YES  |     | NULL    |       |
+| email         | varchar(200) | YES  |     | NULL    |       |
+| phone_num     | varchar(10)  | YES  |     | NULL    |       |
+| hire_date     | date         | YES  |     | NULL    |       |
+| job_id        | int(11)      | YES  | MUL | NULL    |       |
+| salary        | int(11)      | YES  |     | NULL    |       |
+| manager_id    | int(11)      | YES  | MUL | NULL    |       |
+| department_id | int(11)      | YES  | MUL | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
+
+mysql> insert into departments(employee_id,first_name,last_name,email,phone_num,hire_date,job_id,salary,manager_id,department_id)values();
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> desc jobs;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| job_id     | int(11)      | NO   | PRI | NULL    |       |
+| job_title  | varchar(200) | YES  |     | NULL    |       |
+| min_salary | int(11)      | YES  |     | NULL    |       |
+| max_salary | int(11)      | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into jobs(job_id,job_title,min_salary,max_salary)values(3001,"hr",30000,70000),(3001,"hr",30000,70000),
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> insert into jobs(job_id,job_title,min_salary,max_salary)values(3001,"hr",30000,70000),(3002,"digital marketing",10000,20000),(3001,"hr",30000,70000),
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> insert into jobs(job_id,job_title,min_salary,max_salary)values(3001,"hr",30000,70000),(3002,"digital marketing",10000,20000),(3003,"sales exe",25000,30000),(3004,"deve",30000,75000),(3005,"test",30000,70000);
+Query OK, 5 rows affected (0.03 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select *from jobs;
++--------+-------------------+------------+------------+
+| job_id | job_title         | min_salary | max_salary |
++--------+-------------------+------------+------------+
+|   3001 | hr                |      30000 |      70000 |
+|   3002 | digital marketing |      10000 |      20000 |
+|   3003 | sales exe         |      25000 |      30000 |
+|   3004 | deve              |      30000 |      75000 |
+|   3005 | test              |      30000 |      70000 |
++--------+-------------------+------------+------------+
+5 rows in set (0.00 sec)
+
+mysql> desc managers;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| manager_id   | int(11)      | NO   | PRI | NULL    |       |
+| manager_name | varchar(200) | YES  |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+mysql> insert into managres(manager_id,manager_name)values(11,'ashik'),(12,'arun'),(13,'meena'),(14,'manu'),(15,'chandru');
+ERROR 1146 (42S02): Table 'job.managres' doesn't exist
+mysql> insert into managers(manager_id,manager_name)values(11,'ashik'),(12,'arun'),(13,'meena'),(14,'manu'),(15,'chandru');
+Query OK, 5 rows affected (0.03 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select *from managerss;
+ERROR 1146 (42S02): Table 'job.managerss' doesn't exist
+mysql> select *from managers;
++------------+--------------+
+| manager_id | manager_name |
++------------+--------------+
+|         11 | ashik        |
+|         12 | arun         |
+|         13 | meena        |
+|         14 | manu         |
+|         15 | chandru      |
++------------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into departments(employee_id,first_name,last_name,email,phone_num,hire_date,job_id,salary,manager_id,department_id)values(500,'keerthy','suresh','k@gmail.com',6736653662,2023/06/01,3001,500000,11,1,);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> insert into departments(employee_id,first_name,last_name,email,phone_num,hire_date,job_id,salary,manager_id,department_id)values(500,'keerthy','suresh','k@gmail.com',6736653662,2023/06/01,3001,500000,11,1011,);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> insert into departments(employee_id,first_name,last_name,email,phone_num,hire_date,job_id,salary,manager_id,department_id)values(500,'keerthy','suresh','k@gmail.com',6736653662,2023/06/01,3001,500000,11,1011);
+ERROR 1054 (42S22): Unknown column 'employee_id' in 'field list'
+mysql> insert into employees(employee_id,first_name,last_name,email,phone_num,hire_date,job_id,salary,manager_id,department_id)values(500,'keerthy','suresh','k@gmail.com',6736653662,2023/06/01,3001,500000,11,
+ERROR 1292 (22007): Incorrect date value: '337.166666666000000000' for column 'hire_date' at row 1
+mysql> insert into employees(employee_id,first_name,last_name,email,phone_num,hire_date,job_id,salary,manager_id,department_id)values(500,'keerthy','suresh','k@gmail.com',6736653662,'2023/06/01',3001,500000,
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`job`.`employees`, CONSTRAINT `employees_ibfk_2` FOREIGN KEY (`manager_id`) REFERENCES `employees` (`employee_id`))
+mysql> create table employeees(employee_id int primary key,first_name varchar(200),last_name varchar(200),email varchar(200),phone_num varchar(10),hire_date date,job_id int,salary int,manager_id int,department_id int,foreign key (job_id)references jobs(job_id),foreign key (manager_id)references managers(managers_id),foreign key(department_id)references departments(department_id));
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> create table employeees(employee_id int primary key,first_name varchar(200),last_name varchar(200),email varchar(200),phone_num varchar(10),hire_date date,job_id int,salary int,manager_id int,department_id int,foreign key (job_id)references jobs(job_id),foreign key (manager_id)references managers(manager_id),foreign key(department_id)references departments(department_id));
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> drop table employees;
+ERROR 1217 (23000): Cannot delete or update a parent row: a foreign key constraint fails
+mysql> insert into employeees(employee_id,first_name,last_name,email,phone_num,hire_date,job_id,salary,manager_id,department_id)values(500,'keerthy','suresh','k@gmail.com',6736653662,'2023/06/01',3001,500000,
+Query OK, 1 row affected (0.03 sec)
+
+mysql> create table employeeees(employee_id int primary key,first_name varchar(200),last_name varchar(200),email varchar(200),phone_num varchar(10),hire_date date,job_id int,salary int,manager_id int,department_id int,foreign key (job_id)references jobs(job_id),foreign key (manager_id)references managers(manager_id),foreign key(department_id)references departments(department_id));
+Query OK, 0 rows affected (0.35 sec)
+
+mysql> insert into employeeees(employee_id,first_name,last_name,email,phone_num,hire_date,job_id,salary,manager_id,department_id)values(500,'keerthy','suresh','k@gmail.com',6736653662,'2023/06/01',3001,500000,11,1011),(501,'krishna','suresh','kk@gmail.com',9736653662,'2023/06/08',3002,540000,12,1012),(503,'Devika','pr','dpk@gmail.com',9936653662,'2023/06/30',3003,10000,13,1013),(504,'nayanika','pramod','nkk@gmail.com',6744653662,'2023/07/01',3004,28000,14,1014),(505,'aswin','kumar','ak@gmail.com',6736654662,'2023/07/03',3005,50000,15,1015);
+Query OK, 5 rows affected (0.04 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select *from employeeees;
++-------------+------------+-----------+---------------+------------+------------+--------+--------+------------+---------------+
+| employee_id | first_name | last_name | email         | phone_num  | hire_date  | job_id | salary | manager_id | department_id |
++-------------+------------+-----------+---------------+------------+------------+--------+--------+------------+---------------+
+|         500 | keerthy    | suresh    | k@gmail.com   | 6736653662 | 2023-06-01 |   3001 | 500000 |         11 |          1011 |
+|         501 | krishna    | suresh    | kk@gmail.com  | 9736653662 | 2023-06-08 |   3002 | 540000 |         12 |          1012 |
+|         503 | Devika     | pr        | dpk@gmail.com | 9936653662 | 2023-06-30 |   3003 |  10000 |         13 |          1013 |
+|         504 | nayanika   | pramod    | nkk@gmail.com | 6744653662 | 2023-07-01 |   3004 |  28000 |         14 |          1014 |
+|         505 | aswin      | kumar     | ak@gmail.com  | 6736654662 | 2023-07-03 |   3005 |  50000 |         15 |          1015 |
++-------------+------------+-----------+---------------+------------+------------+--------+--------+------------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> desc dependents;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| dependent_id | int(11)      | NO   | PRI | NULL    |       |
+| first_name   | varchar(200) | YES  |     | NULL    |       |
+| last_name    | varchar(200) | YES  |     | NULL    |       |
+| relationship | varchar(100) | YES  |     | NULL    |       |
+| employee_id  | int(11)      | YES  | MUL | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> insert into dependents( dependent_id,first_name,last_name, relationship,employee_id)values(30,'anandhu','rs',brother,501),(30,'anandhu','rs',brother,501),
+    -> 
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> insert into dependents( dependent_id,first_name,last_name, relationship,employee_id)values(30,'anandhu','rs',brother,501),(31,'nandhu','ps',cousin,505);
+ERROR 1054 (42S22): Unknown column 'brother' in 'field list'
+mysql> insert into dependents( dependent_id,first_name,last_name, relationship,employee_id)values(30,'anandhu','rs','brother',501),(31,'nandhu','ps','cousin',505);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`job`.`dependents`, CONSTRAINT `dependents_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`employee_id`))
+mysql>  create table dependents(dependent_id int primary key,first_name varchar(200),last_name varchar(200),relationship varchar(100),employee_id int,foreign key(employee_id) references employeeees(employee_
+ERROR 1050 (42S01): Table 'dependents' already exists
+mysql>  create table dependentss(dependent_id int primary key,first_name varchar(200),last_name varchar(200),relationship varchar(100),employee_id int,foreign key(employee_id) references employeeees(employee_id));
+Query OK, 0 rows affected (0.26 sec)
+
+mysql> insert into dependents( dependent_id,first_name,last_name, relationship,employee_id)values(30,'anandhu','rs','brother',501),(31,'nandhu','ps','cousin',505);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`job`.`dependents`, CONSTRAINT `dependents_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`employee_id`))
+mysql> insert into dependentss( dependent_id,first_name,last_name, relationship,employee_id)values(30,'anandhu','rs','brother',501),(31,'nandhu','ps','cousin',505);
+Query OK, 2 rows affected (0.04 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select *from dependentss;
++--------------+------------+-----------+--------------+-------------+
+| dependent_id | first_name | last_name | relationship | employee_id |
++--------------+------------+-----------+--------------+-------------+
+|           30 | anandhu    | rs        | brother      |         501 |
+|           31 | nandhu     | ps        | cousin       |         505 |
++--------------+------------+-----------+--------------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> update departments set column1=1;
+ERROR 1054 (42S22): Unknown column 'column1' in 'field list'
+mysql> update departments set department_id=1,2,3,4,5;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '2,3,4,5' at line 1
+mysql> update departments set department_id=1;
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`job`.`employeeees`, CONSTRAINT `employeeees_ibfk_3` FOREIGN KEY (`department_id`) REFERENCES `departments` (`department_id`))
+mysql> update departments set department_id="1";
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`job`.`employeeees`, CONSTRAINT `employeeees_ibfk_3` FOREIGN KEY (`department_id`) REFERENCES `departments` (`department_id`))
+mysql> update departments set department_id="1" where department_name="hr";
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`job`.`employeeees`, CONSTRAINT `employeeees_ibfk_3` FOREIGN KEY (`department_id`) REFERENCES `departments` (`department_id`))
+mysql> mysql>show tables;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'updateshow tables' at line 1
+mysql> show tables;
++---------------+
+| Tables_in_job |
++---------------+
+| countries     |
+| departments   |
+| dependents    |
+| dependentss   |
+| employeeees   |
+| employeees    |
+| employees     |
+| jobs          |
+| locations     |
+| managers      |
+| regions       |
++---------------+
+11 rows in set (0.00 sec)
+
+mysql> drop table dependents;
+Query OK, 0 rows affected (0.14 sec)
+
+mysql> drop table employees;
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> drop table employeees;
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> show tables;
++---------------+
+| Tables_in_job |
++---------------+
+| countries     |
+| departments   |
+| dependentss   |
+| employeeees   |
+| jobs          |
+| locations     |
+| managers      |
+| regions       |
++---------------+
+8 rows in set (0.00 sec)
+
+mysql> update departments set department_id="1" where department_name="hr";
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`job`.`employeeees`, CONSTRAINT `employeeees_ibfk_3` FOREIGN KEY (`department_id`) REFERENCES `departments` (`department_id`))
+mysql> ^C
+mysql> drop table departments;
+ERROR 1217 (23000): Cannot delete or update a parent row: a foreign key constraint fails
+mysql> create table departmentss(department_id int primary key,department_name varchar(200),location_id int,foreign key(location_id)references locations(location_id));
+Query OK, 0 rows affected (0.29 sec)
+
+mysql> desc departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| department_id   | int(11)      | NO   | PRI | NULL    |       |
+| department_name | varchar(200) | YES  |     | NULL    |       |
+| location_id     | int(11)      | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+3 rows in set (0.07 sec)
+
+mysql> insert into departmentss(department_id,department_name,location_id)values(1,'hr',2001),(2,'marketer',2002),(3,'sales',2003),(4,'development',2004),(5,'tesing',2005);
+Query OK, 5 rows affected (0.04 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select *from departmentss;
++---------------+-----------------+-------------+
+| department_id | department_name | location_id |
++---------------+-----------------+-------------+
+|             1 | hr              |        2001 |
+|             2 | marketer        |        2002 |
+|             3 | sales           |        2003 |
+|             4 | development     |        2004 |
+|             5 | tesing          |        2005 |
++---------------+-----------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> drop table departments;
+ERROR 1217 (23000): Cannot delete or update a parent row: a foreign key constraint fails
+mysql> update mysql> ues set first_name="Zara" where employee_id=500;
+ERROR 1146 (42S02): Table 'job.employeees' doesn't exist
+mysql> update employeeees set first_name="Zara" where employee_id=500;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select *from employeeees;
++-------------+------------+-----------+---------------+------------+------------+--------+--------+------------+---------------+
+| employee_id | first_name | last_name | email         | phone_num  | hire_date  | job_id | salary | manager_id | department_id |
++-------------+------------+-----------+---------------+------------+------------+--------+--------+------------+---------------+
+|         500 | Zara       | suresh    | k@gmail.com   | 6736653662 | 2023-06-01 |   3001 | 500000 |         11 |          1011 |
+|         501 | krishna    | suresh    | kk@gmail.com  | 9736653662 | 2023-06-08 |   3002 | 540000 |         12 |          1012 |
+|         503 | Devika     | pr        | dpk@gmail.com | 9936653662 | 2023-06-30 |   3003 |  10000 |         13 |          1013 |
+|         504 | nayanika   | pramod    | nkk@gmail.com | 6744653662 | 2023-07-01 |   3004 |  28000 |         14 |          1014 |
+|         505 | aswin      | kumar     | ak@gmail.com  | 6736654662 | 2023-07-03 |   3005 |  50000 |         15 |          1015 |
++-------------+------------+-----------+---------------+------------+------------+--------+--------+------------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> update employeeees set location_id=1700 where city="India";
+ERROR 1054 (42S22): Unknown column 'city' in 'where clause'
+mysql> update employeeees set location_id=1700 where city="postal_code";
+ERROR 1054 (42S22): Unknown column 'city' in 'where clause'
+mysql> update employeeees set location_id=1700 where postal_code=699991 ;
+ERROR 1054 (42S22): Unknown column 'postal_code' in 'where clause'
+mysql> 
+

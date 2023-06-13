@@ -476,7 +476,290 @@ mysql> +-------+------+------+--------+------------+
 ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '+-------+------+------+--------+------------+
 | accno | cid  | bid  | amount | a' at line 1
 mysql> +--------+------+------+--------+
-    -> | loanno | cid  | bid  | amount |
+    -> | loanno | cid  | bid  | amount |chn22mc029@ccn-39-Vostro-3470:~$ mysql -u chn22mc029
+ERROR 1045 (28000): Access denied for user 'chn22mc029'@'localhost' (using password: NO)
+chn22mc029@ccn-39-Vostro-3470:~$ mysql -u mca2229 -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 4
+Server version: 5.7.33-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> mysql> show databases
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'databw databases' at line 1
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| bank               |
+| mysql              |
+| orga               |
+| performance_schema |
+| student            |
+| sys                |
++--------------------+
+7 rows in set (0.06 sec)
+
+mysql> create database job;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use job
+Database changed
+mysql> create table regions;
+ERROR 1113 (42000): A table must have at least 1 column
+mysql> create table regions(region_id int primary key,region_name varchar(20));
+Query OK, 0 rows affected (0.25 sec)
+
+mysql> show table from job;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from job' at line 1
+mysql> show coloums from regions;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'coloums from regions' at line 1
+mysql> show columns from regions;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| region_id   | int(11)     | NO   | PRI | NULL    |       |
+| region_name | varchar(20) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> create table countries(country_id int primary key,country_name varchar(20),region_id int,foreign key(region_id)references regions(region_id));
+Query OK, 0 rows affected (0.25 sec)
+
+mysql> show columns from countries;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| country_id   | int(11)     | NO   | PRI | NULL    |       |
+| country_name | varchar(20) | YES  |     | NULL    |       |
+| region_id    | int(11)     | YES  | MUL | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> create table locations(location _id int primary key,street_address varchar(200),postal_code varchar(20),city varchar(100),state_province varchar(100),country_id int,foreign key(country_id)reference
+s countries(country_id));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '_id int primary key,street_address varchar(200),postal_code varchar(20),city var' at line 1
+mysql> create table locations(location_id int primary key,street_address varchar(200),postal_code varchar(20),city varchar(100),state_province varchar(100),country_id int,foreign key(country_id)references countries(country_id));
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> show columns from locations;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| location_id    | int(11)      | NO   | PRI | NULL    |       |
+| street_address | varchar(200) | YES  |     | NULL    |       |
+| postal_code    | varchar(20)  | YES  |     | NULL    |       |
+| city           | varchar(100) | YES  |     | NULL    |       |
+| state_province | varchar(100) | YES  |     | NULL    |       |
+| country_id     | int(11)      | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> create table departments(department_id int primary key,department_name varchar(200),location_id int,foreign key(location_id)references locations(location_id));Query OK, 0 rows affected (0.29 sec)
+
+mysql> show columns from departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| department_id   | int(11)      | NO   | PRI | NULL    |       |
+| department_name | varchar(200) | YES  |     | NULL    |       |
+| location_id     | int(11)      | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> create table jobs(job_id int primary key,job_title varchar(200),min_salary int,max_salary int);
+Query OK, 0 rows affected (0.24 sec)
+
+mysql> show columns from jobs;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| job_id     | int(11)      | NO   | PRI | NULL    |       |
+| job_title  | varchar(200) | YES  |     | NULL    |       |
+| min_salary | int(11)      | YES  |     | NULL    |       |
+| max_salary | int(11)      | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> create table managers(manager_id int primary key,manager_name varchar(200));
+Query OK, 0 rows affected (0.26 sec)
+
+mysql> show columns from managers;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| manager_id   | int(11)      | NO   | PRI | NULL    |       |
+| manager_name | varchar(200) | YES  |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> create table employees(employee_id int primary key,first_name varchar(200),last_name varchar(200),email varchar(200),phone_num varchar(10),hire_date date,job_id int,salary int,manager_id int,departmysql> create table employees(enployee_id int primary key,first_name varchar(200),last_name varchar(200),email varchar(200),phone_num varchar(10),hire_date date,job_id int,salary int,manager_id int,department_id int,foreign key (job_id)references jobs(job_id),foreign key (manager_id)references employees(employee_id),foreign key(department_id)references departments(department_id));
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> create table employees(employee_id int primary key,first_name varchar(200),last_name varchar(200),email varchar(200),phone_num varchar(10),hire_date date,job_id int,salary int,manager_id int,department_id int,foreign key (job_id)references jobs(job_id),foreign key (manager_id)references employees(employee_id),foreign key(department_id)references departments(department_id));
+Query OK, 0 rows affected (0.35 sec)
+
+mysql> show columns employees;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'employees' at line 1
+mysql> show columns from employees;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| employee_id   | int(11)      | NO   | PRI | NULL    |       |
+| first_name    | varchar(200) | YES  |     | NULL    |       |
+| last_name     | varchar(200) | YES  |     | NULL    |       |
+| email         | varchar(200) | YES  |     | NULL    |       |
+| phone_num     | varchar(10)  | YES  |     | NULL    |       |
+| hire_date     | date         | YES  |     | NULL    |       |
+| job_id        | int(11)      | YES  | MUL | NULL    |       |
+| salary        | int(11)      | YES  |     | NULL    |       |
+| manager_id    | int(11)      | YES  | MUL | NULL    |       |
+| department_id | int(11)      | YES  | MUL | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
+
+mysql> create table dependentss(dependent_id int primary key,first_name varchar(200),last_name varchar(200),relationship varchar(100),employee_id int,foreign key(employee_id) references employees(employee_id));
+Query OK, 0 rows affected (0.29 sec)
+
+mysql> show columns from dependents;
+ERROR 1146 (42S02): Table 'job.dependents' doesn't exist
+mysql> create table dependents(dependent_id int primary key,first_name varchar(200),last_name varchar(200),relationship varchar(100),employee_id int,foreign key(employee_id) references employees(employee_id));
+Query OK, 0 rows affected (0.29 sec)
+
+mysql> show columns from dependents;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| dependent_id | int(11)      | NO   | PRI | NULL    |       |
+| first_name   | varchar(200) | YES  |     | NULL    |       |
+| last_name    | varchar(200) | YES  |     | NULL    |       |
+| relationship | varchar(100) | YES  |     | NULL    |       |
+| employee_id  | int(11)      | YES  | MUL | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> lo        Link encap:Local Loopback  
+    ->           inet addr:127.0.0.1  Mask:255.0.0.0
+    ->           inet6 addr: ::1/128 Scope:Host
+    ->           UP LOOPBACK RUNNING  MTU:65536  Metric:1
+    ->           RX packets:2262 errors:0 dropped:0 overruns:0 frame:0
+    ->           TX packets:2262 errors:0 dropped:0 overruns:0 carrier:0
+    ->           collisions:0 txqueuelen:1000 
+    -> 
+    -> ^DBye
+chn22mc029@ccn-39-Vostro-3470:~$ mysql -u mca2229 -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 7
+Server version: 5.7.33-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use job
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show table from regions;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from regions' at line 1
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| bank               |
+| job                |
+| mysql              |
+| orga               |
+| performance_schema |
+| student            |
+| sys                |
++--------------------+
+8 rows in set (0.00 sec)
+
+mysql> use job
+Database changed
+mysql> show colunms from regions;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'colunms from regions' at line 1
+mysql> show columns from regions;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| region_id   | int(11)     | NO   | PRI | NULL    |       |
+| region_name | varchar(20) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> insert into regions(region_id,region_name)values(1,'North America'),(2,'Africa'),(3,'Asia'),(4,'south America'),(5,'Europe');
+Query OK, 5 rows affected (0.04 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> desc regions;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| region_id   | int(11)     | NO   | PRI | NULL    |       |
+| region_name | varchar(20) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select *from regions;
++-----------+---------------+
+| region_id | region_name   |
++-----------+---------------+
+|         1 | North America |
+|         2 | Africa        |
+|         3 | Asia          |
+|         4 | south America |
+|         5 | Europe        |
++-----------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> show columns from countries;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| country_id   | int(11)     | NO   | PRI | NULL    |       |
+| country_name | varchar(20) | YES  |     | NULL    |       |
+| region_id    | int(11)     | YES  | MUL | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> insert into countries(country_id,country_name,region_id)values(1001,'India',1),(1002,'China',2),(1003,'Brazil',3),(1004,'canada',4),(1005,'France',5);
+Query OK, 5 rows affected (0.04 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select *from countries;
++------------+--------------+-----------+
+| country_id | country_name | region_id |
++------------+--------------+-----------+
+|       1001 | India        |         1 |
+|       1002 | China        |         2 |
+|       1003 | Brazil       |         3 |
+|       1004 | canada       |         4 |
+|       1005 | France       |         5 |
++------------+--------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> insert into locations(location_id,street_address,postal_code,city,state_province,country_id)values(2001,'thambanoor',699991,tvm,tvm,1001),(2002,'wuhan',699992,china,china,1002^C(1003,'Brazil',3),(1mysql> ^C
+mysql> ^C
+mysql> 
+
+
     -> +--------+------+------+--------+
     -> |    200 |  100 |    1 |   1000 |
     -> |    201 |  102 |    2 |   2000 |
@@ -981,7 +1264,290 @@ ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that 
 mysql' at line 1
 mysql> ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.amount from customer c,account a where c.cid=a.cid and a.amount=(select max(amo' at line 1
 ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ERROR 1064 (42000): You have an error in your SQL syntax' at line 1
-    -> mysql> select c.cname,a.amount from customer c,account a where c.cid=a.cid and a.amount=(select max(amount) max from account);
+    -> mysql> select c.cname,a.amount from cuchn22mc029@ccn-39-Vostro-3470:~$ mysql -u chn22mc029
+ERROR 1045 (28000): Access denied for user 'chn22mc029'@'localhost' (using password: NO)
+chn22mc029@ccn-39-Vostro-3470:~$ mysql -u mca2229 -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 4
+Server version: 5.7.33-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> mysql> show databases
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'databw databases' at line 1
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| bank               |
+| mysql              |
+| orga               |
+| performance_schema |
+| student            |
+| sys                |
++--------------------+
+7 rows in set (0.06 sec)
+
+mysql> create database job;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use job
+Database changed
+mysql> create table regions;
+ERROR 1113 (42000): A table must have at least 1 column
+mysql> create table regions(region_id int primary key,region_name varchar(20));
+Query OK, 0 rows affected (0.25 sec)
+
+mysql> show table from job;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from job' at line 1
+mysql> show coloums from regions;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'coloums from regions' at line 1
+mysql> show columns from regions;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| region_id   | int(11)     | NO   | PRI | NULL    |       |
+| region_name | varchar(20) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> create table countries(country_id int primary key,country_name varchar(20),region_id int,foreign key(region_id)references regions(region_id));
+Query OK, 0 rows affected (0.25 sec)
+
+mysql> show columns from countries;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| country_id   | int(11)     | NO   | PRI | NULL    |       |
+| country_name | varchar(20) | YES  |     | NULL    |       |
+| region_id    | int(11)     | YES  | MUL | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> create table locations(location _id int primary key,street_address varchar(200),postal_code varchar(20),city varchar(100),state_province varchar(100),country_id int,foreign key(country_id)reference
+s countries(country_id));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '_id int primary key,street_address varchar(200),postal_code varchar(20),city var' at line 1
+mysql> create table locations(location_id int primary key,street_address varchar(200),postal_code varchar(20),city varchar(100),state_province varchar(100),country_id int,foreign key(country_id)references countries(country_id));
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> show columns from locations;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| location_id    | int(11)      | NO   | PRI | NULL    |       |
+| street_address | varchar(200) | YES  |     | NULL    |       |
+| postal_code    | varchar(20)  | YES  |     | NULL    |       |
+| city           | varchar(100) | YES  |     | NULL    |       |
+| state_province | varchar(100) | YES  |     | NULL    |       |
+| country_id     | int(11)      | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> create table departments(department_id int primary key,department_name varchar(200),location_id int,foreign key(location_id)references locations(location_id));Query OK, 0 rows affected (0.29 sec)
+
+mysql> show columns from departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| department_id   | int(11)      | NO   | PRI | NULL    |       |
+| department_name | varchar(200) | YES  |     | NULL    |       |
+| location_id     | int(11)      | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> create table jobs(job_id int primary key,job_title varchar(200),min_salary int,max_salary int);
+Query OK, 0 rows affected (0.24 sec)
+
+mysql> show columns from jobs;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| job_id     | int(11)      | NO   | PRI | NULL    |       |
+| job_title  | varchar(200) | YES  |     | NULL    |       |
+| min_salary | int(11)      | YES  |     | NULL    |       |
+| max_salary | int(11)      | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> create table managers(manager_id int primary key,manager_name varchar(200));
+Query OK, 0 rows affected (0.26 sec)
+
+mysql> show columns from managers;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| manager_id   | int(11)      | NO   | PRI | NULL    |       |
+| manager_name | varchar(200) | YES  |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> create table employees(employee_id int primary key,first_name varchar(200),last_name varchar(200),email varchar(200),phone_num varchar(10),hire_date date,job_id int,salary int,manager_id int,departmysql> create table employees(enployee_id int primary key,first_name varchar(200),last_name varchar(200),email varchar(200),phone_num varchar(10),hire_date date,job_id int,salary int,manager_id int,department_id int,foreign key (job_id)references jobs(job_id),foreign key (manager_id)references employees(employee_id),foreign key(department_id)references departments(department_id));
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> create table employees(employee_id int primary key,first_name varchar(200),last_name varchar(200),email varchar(200),phone_num varchar(10),hire_date date,job_id int,salary int,manager_id int,department_id int,foreign key (job_id)references jobs(job_id),foreign key (manager_id)references employees(employee_id),foreign key(department_id)references departments(department_id));
+Query OK, 0 rows affected (0.35 sec)
+
+mysql> show columns employees;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'employees' at line 1
+mysql> show columns from employees;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| employee_id   | int(11)      | NO   | PRI | NULL    |       |
+| first_name    | varchar(200) | YES  |     | NULL    |       |
+| last_name     | varchar(200) | YES  |     | NULL    |       |
+| email         | varchar(200) | YES  |     | NULL    |       |
+| phone_num     | varchar(10)  | YES  |     | NULL    |       |
+| hire_date     | date         | YES  |     | NULL    |       |
+| job_id        | int(11)      | YES  | MUL | NULL    |       |
+| salary        | int(11)      | YES  |     | NULL    |       |
+| manager_id    | int(11)      | YES  | MUL | NULL    |       |
+| department_id | int(11)      | YES  | MUL | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
+
+mysql> create table dependentss(dependent_id int primary key,first_name varchar(200),last_name varchar(200),relationship varchar(100),employee_id int,foreign key(employee_id) references employees(employee_id));
+Query OK, 0 rows affected (0.29 sec)
+
+mysql> show columns from dependents;
+ERROR 1146 (42S02): Table 'job.dependents' doesn't exist
+mysql> create table dependents(dependent_id int primary key,first_name varchar(200),last_name varchar(200),relationship varchar(100),employee_id int,foreign key(employee_id) references employees(employee_id));
+Query OK, 0 rows affected (0.29 sec)
+
+mysql> show columns from dependents;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| dependent_id | int(11)      | NO   | PRI | NULL    |       |
+| first_name   | varchar(200) | YES  |     | NULL    |       |
+| last_name    | varchar(200) | YES  |     | NULL    |       |
+| relationship | varchar(100) | YES  |     | NULL    |       |
+| employee_id  | int(11)      | YES  | MUL | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> lo        Link encap:Local Loopback  
+    ->           inet addr:127.0.0.1  Mask:255.0.0.0
+    ->           inet6 addr: ::1/128 Scope:Host
+    ->           UP LOOPBACK RUNNING  MTU:65536  Metric:1
+    ->           RX packets:2262 errors:0 dropped:0 overruns:0 frame:0
+    ->           TX packets:2262 errors:0 dropped:0 overruns:0 carrier:0
+    ->           collisions:0 txqueuelen:1000 
+    -> 
+    -> ^DBye
+chn22mc029@ccn-39-Vostro-3470:~$ mysql -u mca2229 -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 7
+Server version: 5.7.33-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use job
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show table from regions;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from regions' at line 1
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| bank               |
+| job                |
+| mysql              |
+| orga               |
+| performance_schema |
+| student            |
+| sys                |
++--------------------+
+8 rows in set (0.00 sec)
+
+mysql> use job
+Database changed
+mysql> show colunms from regions;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'colunms from regions' at line 1
+mysql> show columns from regions;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| region_id   | int(11)     | NO   | PRI | NULL    |       |
+| region_name | varchar(20) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> insert into regions(region_id,region_name)values(1,'North America'),(2,'Africa'),(3,'Asia'),(4,'south America'),(5,'Europe');
+Query OK, 5 rows affected (0.04 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> desc regions;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| region_id   | int(11)     | NO   | PRI | NULL    |       |
+| region_name | varchar(20) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select *from regions;
++-----------+---------------+
+| region_id | region_name   |
++-----------+---------------+
+|         1 | North America |
+|         2 | Africa        |
+|         3 | Asia          |
+|         4 | south America |
+|         5 | Europe        |
++-----------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> show columns from countries;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| country_id   | int(11)     | NO   | PRI | NULL    |       |
+| country_name | varchar(20) | YES  |     | NULL    |       |
+| region_id    | int(11)     | YES  | MUL | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> insert into countries(country_id,country_name,region_id)values(1001,'India',1),(1002,'China',2),(1003,'Brazil',3),(1004,'canada',4),(1005,'France',5);
+Query OK, 5 rows affected (0.04 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select *from countries;
++------------+--------------+-----------+
+| country_id | country_name | region_id |
++------------+--------------+-----------+
+|       1001 | India        |         1 |
+|       1002 | China        |         2 |
+|       1003 | Brazil       |         3 |
+|       1004 | canada       |         4 |
+|       1005 | France       |         5 |
++------------+--------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> insert into locations(location_id,street_address,postal_code,city,state_province,country_id)values(2001,'thambanoor',699991,tvm,tvm,1001),(2002,'wuhan',699992,china,china,1002^C(1003,'Brazil',3),(1mysql> ^C
+mysql> ^C
+mysql> 
+
+stomer c,account a where c.cid=a.cid and a.amount=(select max(amount) max from account);
 ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'the manual that corresponds to your MySQL server version for the right syntax to' at line 1
 mysql> +-------+--------+
     -> | cname | amount |
@@ -1011,3 +1577,11 @@ ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that 
 +---' at line 1
 mysql> 
 
+
+
+
+
+
+
+
+j
